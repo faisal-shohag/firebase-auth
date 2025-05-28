@@ -12,3 +12,6 @@
 nav a.active {
  @apply bg-base-300 text-base-content
 }
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@custom-variant dark (&:where([data-theme=black], [data-theme=black] *));

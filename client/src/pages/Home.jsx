@@ -1,19 +1,10 @@
-import { useLoaderData } from "react-router";
-import Card from "../components/Card";
+import CreatePost from "../components/posts/CreatePost";
 
 const Home = () => {
-    const data = useLoaderData()
     
     return (
-        <div>
-            {
-                data && <div>
-
-                    {
-                        data.map((c) => <Card company={c}/>)
-                    }
-                </div>
-            }
+        <div className="max-w-5xl mx-auto"> 
+            <CreatePost/>
         </div>
     );
 };

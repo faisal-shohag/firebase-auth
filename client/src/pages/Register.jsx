@@ -20,8 +20,9 @@ const Register = () => {
           },
           body: JSON.stringify({displayName, email, photoURL})
         })
-        .then((res)=>{
-          console.log(res)
+        .then((res)=>res.json())
+        .then(data=> {
+          console.log(data)
         })
         .catch((err) => {
           console.log(err)

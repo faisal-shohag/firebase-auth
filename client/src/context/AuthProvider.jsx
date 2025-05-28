@@ -9,6 +9,7 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
+  deleteUser,
 } from "firebase/auth";
 import { auth } from "../firebase.config";
 import toast from "react-hot-toast";
@@ -50,6 +51,25 @@ const AuthProvider = ({ children }) => {
       });
   };
 
+  const deleteUserAccount = () => {
+    if (!auth.currentUser) {
+      toast.error("No user is currently signed in", { id: "delete-account" });
+      return Promise.reject(new Error("No user signed in"));
+    }
+
+    toast.loading("Deleting account...", { id: "delete-account" });
+    return deleteUser(auth.currentUser)
+      .then(() => {
+        setUser(null);
+        toast.success("Account deleted successfully", { id: "delete-account" });
+      })
+      .catch((error) => {
+        console.error("Error deleting account:", error);
+        toast.error("Failed to delete account: " + error.message, { id: "delete-account" });
+        throw error;
+      });
+  };
+
   const logout = () => {
     setIsLoading(true);
     signOut(auth);
@@ -61,6 +81,7 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     signInWithGithub,
     updateUserProfile,
+    deleteUserAccount,
     logout,
     isLoading,
     user,
@@ -87,7 +108,7 @@ const AuthProvider = ({ children }) => {
     return () => unSubscribe();
   }, []);
 
-  return <AuthContext value={userInfo}>{children}</AuthContext>;
+  return <AuthContext.Provider value={userInfo}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

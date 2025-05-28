@@ -12,6 +12,13 @@ import ProtectedRoute from "./ProtectedRoutes/ProtectedRoute.jsx";
 import Profile from "./pages/Profile.jsx";
 import ThemeProvider from "./context/ThemeProvider.jsx";
 import Users from "./pages/Users.jsx";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import AddData from "./pages/AddData.jsx";
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -21,9 +28,6 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
-        loader: () => {
-          return fetch('/data.json').then((res) => res.json())
-        }
       },
       {
         path: "login",
@@ -32,6 +36,11 @@ const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+       {
+        path: "/add-data",
+        element: <AddData/>
+
       },
       {
         path: "/users",
@@ -61,10 +70,12 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
     </ThemeProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
