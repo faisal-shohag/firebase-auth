@@ -17,6 +17,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import AddData from "./pages/AddData.jsx";
+import CreateBlog from "./pages/blogs/CreateBlog.jsx";
 
 const queryClient = new QueryClient()
 
@@ -46,6 +47,14 @@ const router = createBrowserRouter([
         path: "/users",
         element: <Users></Users>
 
+      },
+      {
+        path: "/blogs/create-blog",
+        element: (
+          <ProtectedRoute>
+            <CreateBlog />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "about",

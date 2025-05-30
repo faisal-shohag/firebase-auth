@@ -15,7 +15,8 @@ app.use(express.json());
 // });
 
 // const uri = "mongodb+srv://faisal2:anCKvk20YK2t2BI0@cluster0.fc5kt4o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const uri = "mongodb+srv://faisal2:anCKvk20YK2t2BI0@cluster0.fc5kt4o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri =
+  "mongodb+srv://faisal2:anCKvk20YK2t2BI0@cluster0.fc5kt4o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 const port = process.env.PORT || 3000;
 // const uri =
@@ -36,32 +37,48 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    // const db = client.db("community");
-    // const postCollection = db.collection("posts");
-    const db = client.db("usersdb2")
-    const userCollection = db.collection("users");
+    const db = client.db("community");
+    const postCollection = db.collection("posts");
+    const blogCollection = db.collection("blogs");
+    // const db = client.db("usersdb2")
+    // const userCollection = db.collection("users");
 
-    app.get("/posts", async (req, res) => {
+    app.get("/blogs", async (req, res) => {
       try {
-         const result = await postCollection.find().toArray();
-      res.send(result);
+        const result = await blogCollection.find().toArray();
+        res.send(result);
       } catch (error) {
-        
-        
+        res.status(500).json({ error: "Failed to get blog" });
       }
     });
 
+    app.post("/blogs", async (req, res) => {
+      try {
+        const data = req.body;
+        const result = await blogCollection.insertOne(data);
+        res.send(result);
+      } catch (error) {
+        res.status(500).json({ error: "Failed to insert blog" });
+      }
+    });
+
+    app.get("/posts", async (req, res) => {
+      try {
+        const result = await postCollection.find().toArray();
+        res.send(result);
+      } catch (error) {}
+    });
+
     app.post("/posts", async (req, res) => {
-       try {
-        const data = req.body
-        
+      try {
+        const data = req.body;
+
         const result = await postCollection.insertOne(data);
         res.send(result);
-        
-       } catch (error) {
+      } catch (error) {
         console.error("Error inserting post:", error);
         res.status(500).json({ error: "Failed to insert post" });
-       }
+      }
     });
 
     app.get("/users", async (req, res) => {
